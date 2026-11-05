@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>서울 주말농장 안내</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=IBM+Plex+Sans+KR:wght@400;600&display=swap">
+<style>
+/* Layout: 밭이랑처럼 가로 띠(band)를 쌓는 구성. 각 띠 안은 최대 1080px 컬럼 */
+:root{
+  --bg:#F3F5EC;      /* 마른 볏짚빛 바탕 */
+  --surface:#FFFFFF;
+  --ink:#1E261C;
+  --muted:#5E6858;
+  --leaf:#3D7A35;    /* 잎 */
+  --leaf-soft:#DCE9CF;
+  --soil:#6A4A2E;    /* 흙 */
+  --soil-soft:#EADCCB;
+  --sun:#E3A82B;     /* 수확 */
+  --sun-soft:#F7E6BC;
+  --line:#D5DACB;
+  --display:"Black Han Sans","Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --data:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151A13;--surface:#1E251B;--ink:#E7ECDF;--muted:#A3AE9A;--leaf:#7DBA6C;--leaf-soft:#2A3D25;
+  --soil:#C9A27C;--soil-soft:#3A2E22;--sun:#F0C15A;--sun-soft:#433820;--line:#334030;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151A13;--surface:#1E251B;--ink:#E7ECDF;--muted:#A3AE9A;--leaf:#7DBA6C;--leaf-soft:#2A3D25;
+  --soil:#C9A27C;--soil-soft:#3A2E22;--sun:#F0C15A;--sun-soft:#433820;--line:#334030;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.7rem,4vw,2.3rem)}
+p{margin:0}
+a{color:var(--leaf)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.eyebrow{font-family:var(--data);font-size:.78rem;letter-spacing:.12em;color:var(--soil);font-weight:600}
+.lede{color:var(--muted);max-width:60ch}
+section{padding-block:72px}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.note{font-family:var(--data);font-size:.8rem;color:var(--muted)}
+
+/* nav */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{font-family:var(--display);font-size:1.25rem;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo svg{width:26px;height:26px}
+nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav a{color:var(--ink);text-decoration:none;font-size:.95rem}
+nav a:hover{color:var(--leaf)}
+@media (max-width:640px){nav ul{gap:12px}nav a{font-size:.85rem}nav li.hide-sm{display:none}}
+
+/* hero */
+.hero{padding-block:64px 48px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--leaf)}
+.hero-copy{display:grid;gap:20px;min-width:0}
+.season{display:inline-flex;align-items:center;gap:10px;background:var(--sun-soft);color:var(--ink);border-radius:999px;padding:6px 14px 6px 8px;font-family:var(--data);font-size:.85rem;justify-self:start}
+.season b{background:var(--sun);color:#2a1f05;border-radius:999px;padding:2px 10px;font-weight:600}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;font-family:var(--body);font-size:1rem;padding:12px 22px;border-radius:10px;text-decoration:none;border:2px solid var(--leaf);cursor:pointer}
+.btn.primary{background:var(--leaf);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--leaf)}
+.btn:hover{filter:brightness(1.08)}
+.rows{width:100%;max-width:100%;aspect-ratio:1/1;border-radius:18px;background:var(--soil-soft);position:relative;overflow:hidden}
+.rows svg{width:100%;height:100%;display:block}
+.facts{display:flex;gap:28px;flex-wrap:wrap;padding-top:8px}
+.facts div{display:grid}
+.facts strong{font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--soil);font-variant-numeric:tabular-nums}
+.facts span{font-size:.85rem;color:var(--muted)}
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr}.rows{max-width:420px}}
+
+/* plans */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:grid;gap:14px;align-content:start;min-width:0}
+.plan.featured{border:2px solid var(--leaf)}
+.plan .tag{font-family:var(--data);font-size:.75rem;color:var(--leaf);font-weight:600;letter-spacing:.06em}
+.plan h3{font-size:1.5rem}
+.size{font-family:var(--data);color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.price{font-family:var(--display);font-size:2rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.price small{font-family:var(--body);font-size:.9rem;color:var(--muted)}
+.plan ul{margin:0;padding-left:1.1em;color:var(--muted);font-size:.95rem;display:grid;gap:4px}
+.included{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--leaf-soft);color:var(--ink);border-radius:999px;padding:4px 12px;font-size:.88rem}
+@media (max-width:820px){.plans{grid-template-columns:1fr}}
+
+/* plot map */
+.band-soil{background:var(--soil-soft)}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;align-items:start}
+.field{background:var(--surface);border-radius:14px;padding:18px;border:1px solid var(--line)}
+.field-row{display:grid;grid-template-columns:28px repeat(8,1fr);gap:6px;margin-bottom:6px;align-items:center}
+.field-row .lbl{font-family:var(--data);font-size:.8rem;color:var(--muted);text-align:center}
+.path{height:14px;border-radius:4px;background:repeating-linear-gradient(90deg,var(--line) 0 10px,transparent 10px 16px);margin:6px 0 12px 34px}
+.plot{aspect-ratio:1/1.3;border-radius:6px;border:none;cursor:pointer;font-family:var(--data);font-size:.72rem;font-weight:600;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;min-width:0}
+.plot.open{background:var(--leaf-soft);color:var(--leaf);outline:2px dashed var(--leaf);outline-offset:-4px}
+.plot.taken{background:var(--leaf);color:var(--bg)}
+.plot.lg{background:var(--sun-soft);color:var(--soil);outline:2px dashed var(--sun);outline-offset:-4px}
+.plot.lg.taken{background:var(--sun);color:#2a1f05;outline:none}
+.plot[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.detail{background:var(--surface);border-radius:14px;padding:22px;border:1px solid var(--line);display:grid;gap:12px}
+.detail h3{font-size:1.6rem}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.95rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--data);font-variant-numeric:tabular-nums}
+.status{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-family:var(--data);font-weight:600}
+.status.ok{background:var(--leaf-soft);color:var(--leaf)}
+.status.no{background:var(--line);color:var(--muted)}
+.count{font-family:var(--data);font-size:.9rem}
+.count b{font-family:var(--display);font-weight:400;font-size:1.5rem;color:var(--leaf)}
+@media (max-width:820px){.mapgrid{grid-template-columns:1fr}}
+
+/* calendar */
+.cal-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table.cal{border-collapse:collapse;width:100%;min-width:720px;font-family:var(--data);font-size:.82rem}
+.cal th,.cal td{padding:0;text-align:center;height:40px}
+.cal thead th{color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.cal thead th.now{color:var(--bg);background:var(--soil)}
+.cal tbody th{text-align:left;padding:0 14px;font-family:var(--body);font-size:.95rem;font-weight:400;white-space:nowrap;width:120px}
+.cal tbody tr+tr th,.cal tbody tr+tr td{border-top:1px solid var(--line)}
+.cal td span{display:block;height:16px;margin:0 1px}
+.cal td.now{background:color-mix(in srgb,var(--soil) 10%,transparent)}
+.s-sow{background:var(--soil)}
+.s-grow{background:var(--leaf-soft)}
+.s-harv{background:var(--sun)}
+.cal-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.85rem;color:var(--muted)}
+.cal-legend i{display:inline-block;width:22px;height:10px;border-radius:2px;margin-right:6px;vertical-align:1px}
+
+/* programs */
+.progs{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line)}
+.prog{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--line);min-width:0}
+.prog:nth-child(odd){padding-right:24px}
+.prog:nth-child(even){padding-left:24px;border-left:1px solid var(--line)}
+.prog .when{font-family:var(--data);font-size:.82rem;color:var(--soil);font-weight:600}
+.prog h3{font-size:1.25rem;margin-bottom:4px}
+.prog p{color:var(--muted);font-size:.95rem}
+@media (max-width:760px){.progs{grid-template-columns:1fr}.prog:nth-child(n){padding-left:0;padding-right:0;border-left:none}}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.rule{display:grid;gap:8px;min-width:0}
+.rule .ico{width:44px;height:44px;border-radius:10px;background:var(--leaf-soft);display:grid;place-items:center}
+.rule .ico svg{width:24px;height:24px;stroke:var(--leaf);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rule h3{font-size:1.1rem;font-family:var(--body);font-weight:700}
+.rule p{color:var(--muted);font-size:.92rem}
+@media (max-width:820px){.rules{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:440px){.rules{grid-template-columns:1fr}}
+
+/* apply + visit */
+.band-leaf{background:var(--leaf);color:var(--bg)}
+.band-leaf .eyebrow{color:var(--sun-soft)}
+.band-leaf .lede{color:color-mix(in srgb,var(--bg) 82%,transparent)}
+.apply{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+form{background:var(--surface);color:var(--ink);border-radius:14px;padding:24px;display:grid;gap:14px}
+label{display:grid;gap:6px;font-size:.9rem}
+input,select,textarea{font:inherit;font-size:1rem;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result{background:var(--leaf-soft);border-radius:10px;padding:14px;font-size:.92rem;white-space:pre-line}
+.visit{display:grid;gap:18px}
+.visit dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0}
+.visit dt{color:color-mix(in srgb,var(--bg) 75%,transparent);font-size:.9rem}
+.visit dd{margin:0}
+.copy{font:inherit;font-size:.8rem;margin-left:8px;padding:2px 10px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+@media (max-width:820px){.apply{grid-template-columns:1fr}}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+
+footer{padding-block:28px;font-size:.85rem;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (prefers-reduced-motion:no-preference){.sprout{transform-origin:bottom;animation:grow 1.2s ease-out both}@keyframes grow{from{transform:scaleY(.6)}to{transform:scaleY(1)}}}
+</style>
+</head>
+<body>
+<style>
+.notice{width:100%;border-collapse:collapse;min-width:640px;font-size:.95rem}
+.notice th,.notice td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.notice thead th{font-family:var(--data);font-size:.8rem;color:var(--muted);font-weight:600}
+.notice td.d{font-family:var(--data);font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.steps{display:grid;gap:14px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;counter-increment:s}
+.steps li::before{content:counter(s);width:32px;height:32px;border-radius:50%;background:var(--sun);color:#2a1f05;display:grid;place-items:center;font-family:var(--data);font-weight:600}
+.card{background:var(--surface);color:var(--ink);border-radius:14px;padding:24px;display:grid;gap:16px}
+.band-leaf .card a{color:var(--leaf)}
+.src{display:grid;gap:6px;font-size:.85rem}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28V14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 16c0-6 4-9 10-9 0 6-4 9-10 9z" fill="var(--leaf)"/><path d="M16 19c0-5-3-8-9-8 0 5 3 8 9 8z" fill="var(--leaf)" opacity=".7"/></svg>
+      서울 주말농장
+    </a>
+    <nav aria-label="주요 메뉴"><ul>
+      <li><a href="#plans">농장 안내</a></li>
+      <li><a href="#notice">분양 공고</a></li>
+      <li class="hide-sm"><a href="#calendar">작물 달력</a></li>
+      <li class="hide-sm"><a href="#programs">프로그램</a></li>
+      <li><a href="#apply">신청 방법</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="season" id="season"><b>11월</b> 2026 시즌 마무리 · 11월 말 폐장</span>
+      <h1>서울 시민의<br><em>주말 텃밭</em>, 동행서울 친환경농장</h1>
+      <p class="lede">서울시가 2000년부터 운영하는 서울 근교 주말농장입니다. 남양주·양평·광주·고양의 11개 농장에서 한 구획 16.5㎡(약 5평)를 1년 단위로 분양하며, 농약과 화학비료, 비닐멀칭 없이 친환경으로 가꿉니다.</p>
+      <div class="cta">
+        <a class="btn primary" href="#apply">신청 방법 보기</a>
+        <a class="btn ghost" href="https://cityfarmer.seoul.go.kr/" target="_blank" rel="noopener">서울농부포털 바로가기</a>
+      </div>
+      <div class="facts">
+        <div><strong>11개소</strong><span>서울 근교 농장</span></div>
+        <div><strong>4,515구획</strong><span>2026년 분양 규모</span></div>
+        <div><strong>16.5㎡</strong><span>1구획 면적</span></div>
+      </div>
+    </div>
+    <div class="rows" aria-hidden="true">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+        <rect width="400" height="400" fill="var(--soil-soft)"/>
+        <g fill="var(--soil)" opacity=".22">
+          <rect x="0" y="40" width="400" height="34" rx="17"/><rect x="0" y="120" width="400" height="34" rx="17"/>
+          <rect x="0" y="200" width="400" height="34" rx="17"/><rect x="0" y="280" width="400" height="34" rx="17"/>
+        </g>
+        <g id="sprouts"></g>
+        <circle cx="338" cy="58" r="30" fill="var(--sun)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="plans">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">농장 안내 · 2026년 기준</span>
+      <h2>어디에서 가꿀 수 있나요</h2>
+      <p class="lede">분양료는 1구획의 1년 임차료이며 신용카드나 가상계좌로 냅니다. 1인당 최대 5구획까지, 11개 농장 가운데 한 곳에만 신청할 수 있습니다.</p>
+    </div>
+    <div class="plans">
+      <article class="plan featured">
+        <span class="tag">팔당상수원 보호구역</span>
+        <h3>남양주 · 양평 · 광주</h3>
+        <div class="size">16.5㎡ / 구획 · 2025년 3,315구획</div>
+        <div class="price">4만원 <small>/ 구획·년</small></div>
+        <ul><li>한강수계기금 지원으로 분양료가 낮음</li><li>2025년 구획 수: 남양주 1,120 · 양평 1,380 · 광주 815</li></ul>
+      </article>
+      <article class="plan">
+        <span class="tag">경기 북서부</span>
+        <h3>고양</h3>
+        <div class="size">16.5㎡ / 구획 · 2025년 1,100구획</div>
+        <div class="price">7만원 <small>/ 구획·년</small></div>
+        <ul><li>‘수역이 농장’에서 매력텃밭정원 운영</li><li>허브·식용 꽃·채소 오감 체험</li></ul>
+      </article>
+      <article class="plan">
+        <span class="tag">서울 도심 · 별도 모집</span>
+        <h3>용산가족공원 텃밭</h3>
+        <div class="size">132구획 · 추첨 분양</div>
+        <div class="price">2만원 <small>/ 구획</small></div>
+        <ul><li>122구획 일반 추첨, 10구획 단체 심사</li><li>2026년 이용 기간 3월 21일~11월 29일</li></ul>
+      </article>
+    </div>
+    <div class="included" aria-label="분양자 지원 내용">
+      <span class="chip">봄·가을 모종과 씨앗</span><span class="chip">유기질비료</span><span class="chip">친환경 방제제</span><span class="chip">소농기구 세트 구입비 50%</span><span class="chip">토양 중금속·잔류농약 검사</span><span class="chip">찾아가는 텃밭 닥터</span>
+    </div>
+  </div>
+</section>
+
+<section id="notice" class="band-soil">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">서울농부포털 · 텃밭 분양 게시판</span>
+      <h2>2026년 분양 공고</h2>
+      <p class="lede">올해 공고는 모두 모집이 끝났습니다. 지난해와 같다면 2027년 동행서울 친환경농장 공고는 1월 중순, 접수는 2월 초에 열립니다. 다음 모집 일정은 포털 공지에서 확인해 주세요.</p>
+    </div>
+    <div class="cal-scroll" style="background:var(--surface)">
+      <table class="notice">
+        <thead><tr><th>공고</th><th>기관</th><th>등록일</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>(성동구) 2026년 상자텃밭 보급 안내</td><td>성동구</td><td class="d">2026-05-07</td><td><span class="status no">마감</span></td></tr>
+          <tr><td>(성북구) 2026년 상자텃밭 보급 안내</td><td>성북구</td><td class="d">2026-03-06</td><td><span class="status no">마감</span></td></tr>
+          <tr><td>(강서구) 2026년 오곡텃밭농장 참여자 모집</td><td>서울특별시</td><td class="d">2026-02-19</td><td><span class="status no">마감</span></td></tr>
+          <tr><td>서울 근교 11개소, 2026년 동행서울 친환경농장 참여자 모집</td><td>서울특별시</td><td class="d">2026-01-12</td><td><span class="status no">마감</span></td></tr>
+          <tr><td>용산가족공원 친환경 텃밭 (2월 6일까지 접수)</td><td>중부공원여가센터</td><td class="d">2026-02</td><td><span class="status no">마감</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:12px">상태는 2026년 11월 5일 기준이며, 공고 원문은 <a href="https://cityfarmer.seoul.go.kr/newInfo/www/list.do?key=2306072807882" target="_blank" rel="noopener">서울농부포털 텃밭 분양</a>에서 볼 수 있습니다.</p>
+  </div>
+</section>
+
+<section id="calendar">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">작물 달력 · 중부지방 기준</span>
+      <h2>언제 심고 언제 거두나</h2>
+      <p class="lede">동행서울 친환경농장은 4월 초에 열고 11월 말에 닫습니다. 이번 달은 진하게 표시됩니다.</p>
+    </div>
+    <div class="cal-scroll"><table class="cal" id="cal"></table></div>
+    <div class="cal-legend"><span><i class="s-sow"></i>파종·아주심기</span><span><i class="s-grow"></i>키우는 중</span><span><i class="s-harv"></i>수확</span></div>
+  </div>
+</section>
+
+<section id="programs" class="band-soil">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">함께 하는 프로그램</span>
+      <h2>텃밭 말고도 이런 것들</h2>
+    </div>
+    <div class="progs">
+      <div class="prog"><span class="when">고양 농장</span><div><h3>매력텃밭정원</h3><p>고양 ‘수역이 농장’에서 허브·식용 꽃·채소로 텃밭 디자인과 허브차 만들기를 체험합니다. 2025년 120명이 참여했습니다.</p></div></div>
+      <div class="prog"><span class="when">2026 신규</span><div><h3>찾아가는 텃밭 닥터</h3><p>도시농업관리사가 내 텃밭에 찾아와 흙과 작물 상태를 진단하고 재배 방법을 알려줍니다.</p></div></div>
+      <div class="prog"><span class="when">자치구 · 봄</span><div><h3>상자텃밭 보급</h3><p>밭에 가기 어렵다면 베란다나 옥상용 상자텃밭을 구청에서 보급합니다. 성동·성북·중랑·서대문·은평구 등에서 모집했습니다.</p></div></div>
+      <div class="prog"><span class="when">서울 시내</span><div><h3>구립 텃밭·나눔텃밭</h3><p>강서구 오곡텃밭농장, 은평구 친환경 나눔텃밭, 중랑행복농장처럼 자치구가 직접 분양하는 텃밭도 있습니다.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">친환경 농법</span>
+      <h2>꼭 지켜야 하는 원칙</h2>
+    </div>
+    <div class="rules">
+      <div class="rule"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3c-4 5-6 8-6 11a6 6 0 0 0 12 0c0-3-2-6-6-11z"/></svg></div><h3>무농약</h3><p>유기합성농약은 쓰지 않습니다. 병해충은 지원받은 친환경 방제제로 다스립니다.</p></div>
+      <div class="rule"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 20h14M7 20V10l5-6 5 6v10"/></svg></div><h3>무화학비료</h3><p>국립농산물품질관리원에 공시된 유기질비료만 씁니다.</p></div>
+      <div class="rule"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 17c3-3 6-3 9 0s6 3 9 0M3 11c3-3 6-3 9 0s6 3 9 0"/></svg></div><h3>무멀칭</h3><p>비닐멀칭을 하지 않습니다. 풀은 손으로 뽑거나 짚을 덮어 관리합니다.</p></div>
+      <div class="rule"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></div><h3>무쓰레기</h3><p>용산가족공원 텃밭은 여기에 무유전자변형생물체까지 더한 5무 원칙을 지킵니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="apply" class="band-leaf">
+  <div class="wrap apply">
+    <div class="visit">
+      <div class="sec-head" style="margin-bottom:8px">
+        <span class="eyebrow">신청 방법 · 동행서울 친환경농장</span>
+        <h2>이렇게 신청하세요</h2>
+        <p class="lede">신청과 결제는 서울시 공공서비스예약에서 본인이 직접 합니다. 선착순이라 접수 첫날 오전에 빨리 찹니다.</p>
+      </div>
+      <ol class="steps">
+        <li><div><b>대상 확인</b><br>주민등록등본상 주소가 서울인 시민</div></li>
+        <li><div><b>1월 공고 확인</b><br>서울농부포털과 서울시 누리집에 모집 공고가 올라옵니다</div></li>
+        <li><div><b>2월 초 선착순 접수</b><br>서울시 공공서비스예약(yeyak.seoul.go.kr), 2025년은 2월 3일 오전 10시 시작</div></li>
+        <li><div><b>분양료 결제 후 4월 개장</b><br>1인 최대 5구획, 농장 1곳만 신청 가능</div></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3 style="font-size:1.4rem">문의처</h3>
+      <dl class="kv">
+        <dt>다산콜센터</dt><dd>국번없이 120 <button class="copy" data-copy="120" type="button">복사</button></dd>
+        <dt>친환경농장</dt><dd>서울시 공원여가사업과 02-2133-9374 <button class="copy" data-copy="02-2133-9374" type="button">복사</button></dd>
+        <dt>용산 텃밭</dt><dd>중부공원여가센터 02-3783-5994 <button class="copy" data-copy="02-3783-5994" type="button">복사</button></dd>
+      </dl>
+      <div class="src">
+        <b>바로가기</b>
+        <a href="https://yeyak.seoul.go.kr/" target="_blank" rel="noopener">서울시 공공서비스예약</a>
+        <a href="https://cityfarmer.seoul.go.kr/content.do?key=1905228829214" target="_blank" rel="noopener">서울농부포털 · 동행서울 친환경농장</a>
+        <a href="https://cityfarmer.seoul.go.kr/newInfo/www/list.do?key=2306072813012" target="_blank" rel="noopener">서울농부포털 · 교육/체험</a>
+        <a href="http://agro.seoul.go.kr/" target="_blank" rel="noopener">서울시농업기술센터</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>자료: 서울농부포털, 서울시 보도자료(2025.2.4), 머니투데이(2026.2.2)</span>
+    <span>2026년 11월 5일 기준 정리 · 최신 일정은 공고 원문을 확인하세요</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const m = new Date().getMonth()+1;
+  const seasonText = {1:"2027 모집 공고 시기",2:"선착순 접수 시기",3:"개장 준비",4:"농장 개장 · 봄 모종 배부",5:"고추·토마토 아주심기",6:"감자 캐기",7:"여름 수확",8:"김장 배추·무 파종",9:"가을 모종 배부",10:"고구마 캐기·마늘 심기",11:"2026 시즌 마무리 · 11월 말 폐장",12:"휴장 · 다음 모집 준비"};
+  document.getElementById("season").innerHTML = "<b>"+m+"월</b> "+seasonText[m];
+  const g = document.getElementById("sprouts"), ns="http://www.w3.org/2000/svg";
+  [57,137,217,297].forEach((y,r)=>{for(let i=0;i<7;i++){const x=30+i*56+(r%2?24:0);if(x>390)continue;
+    const s=document.createElementNS(ns,"g");s.setAttribute("class","sprout");s.setAttribute("transform",`translate(${x} ${y})`);s.style.animationDelay=(r*0.15+i*0.05)+"s";
+    s.innerHTML=`<path d="M0 0V-16" stroke="var(--leaf)" stroke-width="3" stroke-linecap="round"/><path d="M0 -12c0-9 6-13 15-13 0 9-6 13-15 13z" fill="var(--leaf)"/><path d="M0 -8c0-8-5-11-13-11 0 8 5 11 13 11z" fill="var(--leaf)" opacity=".75"/>`;g.appendChild(s);}});
+  const crops=[["감자",[0,0,1,2,2,3,0,0,0,0,0,0]],["상추",[0,0,1,1,3,3,0,0,1,3,3,0]],["고추",[0,0,0,0,1,2,3,3,3,3,0,0]],["토마토",[0,0,0,0,1,2,3,3,0,0,0,0]],["고구마",[0,0,0,0,1,2,2,2,2,3,0,0]],["옥수수",[0,0,0,1,2,2,3,3,0,0,0,0]],["김장 배추",[0,0,0,0,0,0,0,1,2,2,3,0]],["김장 무",[0,0,0,0,0,0,0,1,2,3,3,0]],["마늘",[0,0,0,0,0,3,0,0,0,1,2,2]]];
+  const cls=["","s-sow","s-grow","s-harv"];
+  let t="<thead><tr><th scope='col'><span class='note'>작물</span></th>";
+  for(let i=1;i<=12;i++)t+=`<th scope="col" class="${i===m?"now":""}">${i}월</th>`;
+  t+="</tr></thead><tbody>";
+  crops.forEach(([n,a])=>{t+=`<tr><th scope="row">${n}</th>`;a.forEach((v,i)=>{t+=`<td class="${i+1===m?"now":""}">${v?`<span class="${cls[v]}"></span>`:""}</td>`});t+="</tr>"});
+  document.getElementById("cal").innerHTML=t+"</tbody>";
+  function copy(text,btn){const done=()=>{const o=btn.textContent;btn.textContent="복사됨";setTimeout(()=>btn.textContent=o,1500)};
+    try{navigator.clipboard.writeText(text).then(done).catch(()=>{})}catch(_){}}
+  document.querySelectorAll("[data-copy]").forEach(b=>b.addEventListener("click",()=>copy(b.dataset.copy,b)));
+})();
+</script>
+</body>
+</html>
